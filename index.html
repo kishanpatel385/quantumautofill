@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Quantum Autofill — Privacy-first autofill, clips, macros & encrypted vault</title>
+<meta name="description" content="Quantum-fast autofill. Zero data leaves your device. A Chrome extension combining smart autofill, text expansion, macros, clip library, and an encrypted vault." />
+<link rel="icon" type="image/png" href="./assets/icon.png" />
+<meta property="og:title" content="Quantum Autofill — Privacy-first browser extension" />
+<meta property="og:description" content="Smart autofill, text expansion, macros, clips, encrypted vault. 100% local." />
+<meta property="og:image" content="./assets/icon.png" />
+<meta name="theme-color" content="#ea580c" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#fff7ed; --surface:#ffffff; --fg:#0f172a; --subtle:#475569;
+    --border:#e2e8f0; --muted:#f1f5f9; --primary:#ea580c; --primary-soft:#ffedd5;
+    --accent:#fb923c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
+    color: var(--fg); background: var(--bg); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* Nav */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(255,247,237,.85); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  nav .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; color: var(--fg); }
+  nav .brand img { width: 32px; height: 32px; border-radius: 8px; }
+  nav .links { display: flex; gap: 24px; align-items: center; }
+  nav .links a { color: var(--subtle); font-weight: 500; font-size: 14px; }
+  nav .links a:hover { color: var(--fg); text-decoration: none; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px; border-radius: 10px; font-weight: 600;
+    font-size: 14px; transition: all .15s;
+  }
+  .btn-primary {
+    background: var(--primary); color: #fff;
+    box-shadow: 0 4px 14px rgba(234,88,12,.35);
+  }
+  .btn-primary:hover { background: #c2410c; text-decoration: none; transform: translateY(-1px); }
+  .btn-outline {
+    border: 1px solid var(--border); background: var(--surface); color: var(--fg);
+  }
+  .btn-outline:hover { border-color: var(--primary); text-decoration: none; }
+
+  /* Hero */
+  .hero { padding: 80px 0 64px; text-align: center; }
+  .hero .eyebrow {
+    display: inline-block; padding: 6px 14px; background: var(--primary-soft);
+    color: var(--primary); border-radius: 100px; font-weight: 600; font-size: 12px;
+    letter-spacing: .08em; text-transform: uppercase; margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(40px, 6vw, 68px); font-weight: 800; line-height: 1.05;
+    letter-spacing: -0.03em; margin-bottom: 20px;
+  }
+  .hero h1 .grad {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero p {
+    font-size: 18px; color: var(--subtle); max-width: 640px; margin: 0 auto 40px;
+  }
+  .hero .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .hero .chips {
+    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 32px;
+  }
+  .chip {
+    padding: 6px 12px; border: 1px solid var(--border); background: var(--surface);
+    border-radius: 100px; font-size: 12px; color: var(--subtle); font-weight: 500;
+  }
+
+  /* Preview */
+  .preview { padding: 24px 0 80px; }
+  .preview img {
+    width: 100%; border-radius: 16px; border: 1px solid var(--border);
+    box-shadow: 0 30px 80px -20px rgba(234,88,12,.25);
+  }
+
+  /* Features */
+  .features { padding: 80px 0; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .section-head { text-align: center; margin-bottom: 56px; }
+  .section-head .eyebrow { color: var(--primary); font-weight: 700; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+  .section-head h2 { font-size: 40px; font-weight: 800; margin: 12px 0 12px; letter-spacing: -0.02em; }
+  .section-head p { color: var(--subtle); font-size: 17px; max-width: 560px; margin: 0 auto; }
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .card {
+    padding: 28px; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 16px; transition: all .2s;
+  }
+  .card:hover { transform: translateY(-2px); border-color: var(--primary); box-shadow: 0 8px 24px rgba(234,88,12,.12); }
+  .card .ico {
+    width: 44px; height: 44px; border-radius: 10px; background: var(--primary-soft);
+    display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
+    font-size: 20px;
+  }
+  .card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .card p { color: var(--subtle); font-size: 14px; }
+
+  /* Screenshots */
+  .shots { padding: 80px 0; }
+  .shots .stack { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .shots img { width: 100%; border-radius: 12px; border: 1px solid var(--border); }
+  .shots .full { grid-column: 1 / -1; }
+  @media (max-width: 720px) { .shots .stack { grid-template-columns: 1fr; } }
+
+  /* Privacy */
+  .privacy { padding: 80px 0; background: linear-gradient(135deg, var(--primary-soft), #fff); }
+  .privacy .list {
+    max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px;
+  }
+  .privacy .item {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 16px 20px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .privacy .item .check {
+    color: #16a34a; font-weight: 800; flex-shrink: 0; font-size: 18px; line-height: 1.4;
+  }
+  .privacy .item span { color: var(--fg); font-size: 15px; }
+
+  /* Pricing */
+  .pricing { padding: 80px 0; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .pricing .plan {
+    max-width: 520px; margin: 0 auto; padding: 48px 40px;
+    border: 2px solid var(--primary); border-radius: 20px; background: var(--bg);
+    box-shadow: 0 20px 60px -20px rgba(234,88,12,.25); text-align: center;
+  }
+  .pricing .plan .tag {
+    display: inline-block; padding: 4px 12px; background: var(--primary); color: #fff;
+    border-radius: 100px; font-size: 11px; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase; margin-bottom: 16px;
+  }
+  .pricing .plan h3 { font-size: 26px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.02em; }
+  .pricing .plan .note { color: var(--subtle); font-size: 14px; margin-bottom: 24px; }
+  .pricing .plan .price { font-size: 72px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; color: var(--primary); }
+  .pricing .plan ul { list-style: none; text-align: left; margin: 24px 0; }
+  .pricing .plan ul li {
+    padding: 8px 0; font-size: 14px; color: var(--fg);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .pricing .plan ul li::before { content: "✓"; color: #16a34a; font-weight: 800; }
+  .pricing .plan .btn { width: 100%; justify-content: center; font-size: 15px; padding: 14px 18px; }
+  .pricing .footnote { text-align: center; color: var(--subtle); font-size: 13px; margin-top: 24px; }
+
+  /* CTA */
+  .cta-band { padding: 80px 0; text-align: center; }
+  .cta-band h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px; }
+  .cta-band p { color: var(--subtle); font-size: 17px; margin-bottom: 32px; }
+
+  /* Footer */
+  footer { padding: 40px 0; border-top: 1px solid var(--border); background: var(--surface); }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  footer .brand { display: flex; align-items: center; gap: 10px; color: var(--subtle); font-size: 13px; }
+  footer .brand img { width: 24px; height: 24px; border-radius: 6px; }
+  footer .links { display: flex; gap: 20px; font-size: 13px; }
+  footer .links a { color: var(--subtle); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <img src="./assets/icon.png" alt="" />
+      Quantum Autofill
+    </a>
+    <div class="links">
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="./privacy.html">Privacy</a>
+      <a href="https://chromewebstore.google.com/detail/quantum-autofill/gehcemnmphffjdpnemcnffibbfjhpdka" class="btn btn-primary" target="_blank" rel="noopener">Install</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <span class="eyebrow">Privacy-first · 100% local</span>
+    <h1>Quantum-fast autofill.<br/><span class="grad">Zero data leaves your device.</span></h1>
+    <p>A Chrome extension that combines smart autofill, text expansion, macros, a clip library, a test-data generator, form history, and an encrypted vault — all stored only on your device.</p>
+    <div class="cta">
+      <a href="https://chromewebstore.google.com/detail/quantum-autofill/gehcemnmphffjdpnemcnffibbfjhpdka" class="btn btn-primary" target="_blank" rel="noopener">⚡ Install on Chrome</a>
+      <a href="https://addons.mozilla.org/en-US/firefox/addon/quantum-autofill/" class="btn btn-outline" target="_blank" rel="noopener">🦊 Install on Firefox</a>
+    </div>
+    <div class="chips">
+      <span class="chip">100% local data</span>
+      <span class="chip">No tracking</span>
+      <span class="chip">No ads</span>
+      <span class="chip">AES-256 vault</span>
+      <span class="chip">Manifest V3</span>
+    </div>
+  </div>
+</section>
+
+<section class="preview">
+  <div class="wrap">
+    <img src="./assets/screenshots/dashboard.png" alt="Quantum Autofill dashboard" />
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Features</span>
+      <h2>Everything you need, built in</h2>
+      <p>Eight tightly integrated modules, no plugins required.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="ico">🌐</div><h3>Replacements</h3><p>Per-URL field values auto-fill matching pages on load. Smart key matching reads HTML attributes. Multi-paragraph values into textareas and contenteditables alike.</p></div>
+      <div class="card"><div class="ico">📋</div><h3>Text Clips</h3><p>Reusable snippets inserted via popup, right-click menu, or an in-page overlay (<code>Alt+C</code>). Per-site relevance ranking, pins, recency sort.</p></div>
+      <div class="card"><div class="ico">⌨️</div><h3>Text Expansion</h3><p>Type a shortcode anywhere; expands inline as you type. Case-sensitivity per shortcode, length-priority matching.</p></div>
+      <div class="card"><div class="ico">🪄</div><h3>Macros</h3><p>Record clicks + typing on any page, replay with one click. Selector-resilient wait and scroll-into-view.</p></div>
+      <div class="card"><div class="ico">✨</div><h3>Test Data</h3><p>Realistic sample data (names, emails, phones, addresses) for QA engineers and developers testing their own forms. Generated locally.</p></div>
+      <div class="card"><div class="ico">🗂️</div><h3>Form History</h3><p>Auto-log every submitted form (passwords excluded). Searchable, paginated, auto-pruned to 1000 entries.</p></div>
+      <div class="card"><div class="ico">🔒</div><h3>Secure Vault</h3><p>AES-GCM 256 encrypted local storage with PBKDF2-derived key. Auto-locks on idle, clipboard auto-clears 30s after copy.</p></div>
+      <div class="card"><div class="ico">💾</div><h3>Backup & Restore</h3><p>Single-file JSON export of everything. Vault entries stay encrypted — same master password on the new device decrypts.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="shots">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">See it</span>
+      <h2>Built for speed, designed for calm</h2>
+      <p>Popup, dashboard, and in-page picker — everything where you expect it.</p>
+    </div>
+    <div class="stack">
+      <img src="./assets/screenshots/popup.png" alt="Popup" />
+      <img src="./assets/screenshots/clip-overlay.png" alt="Clip picker overlay" />
+    </div>
+  </div>
+</section>
+
+<section class="privacy" id="privacy">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Privacy</span>
+      <h2>Your data never leaves this device</h2>
+      <p>No telemetry. No third-party servers. Period.</p>
+    </div>
+    <div class="list">
+      <div class="item"><span class="check">✓</span><span>All data stored locally in your browser (IndexedDB + chrome.storage)</span></div>
+      <div class="item"><span class="check">✓</span><span>No external network requests. No analytics. No advertising.</span></div>
+      <div class="item"><span class="check">✓</span><span>Vault uses Web Crypto AES-GCM 256 with PBKDF2 (100k iterations)</span></div>
+      <div class="item"><span class="check">✓</span><span>Password fields are never recorded in form history</span></div>
+      <div class="item"><span class="check">✓</span><span>Strict Content Security Policy — no inline scripts, no remote code</span></div>
+      <div class="item"><span class="check">✓</span><span>Clipboard auto-clears 30s after a vault copy</span></div>
+      <div class="item"><span class="check">✓</span><span>Open integration points: export JSON anytime, import anywhere</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Pricing</span>
+      <h2>Completely free</h2>
+      <p>Every feature. No accounts. No ads. No hidden costs.</p>
+    </div>
+    <div class="plan">
+      <span class="tag">Quantum Autofill</span>
+      <h3>All features, unlocked</h3>
+      <p class="note">One simple product. No tiers, no upsells.</p>
+      <div class="price">Free</div>
+      <ul>
+        <li>Unlimited replacements, clips, expansions</li>
+        <li>Macro recording & replay</li>
+        <li>AES-256 encrypted vault</li>
+        <li>Form history & test-data generator</li>
+        <li>Backup & restore as JSON</li>
+        <li>All future updates included</li>
+      </ul>
+      <a href="https://chromewebstore.google.com/detail/quantum-autofill/gehcemnmphffjdpnemcnffibbfjhpdka" class="btn btn-primary" target="_blank" rel="noopener">⚡ Install on Chrome</a>
+    </div>
+    <p class="footnote">100% free forever for early users.</p>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="wrap">
+    <h2>Ready to try Quantum Autofill?</h2>
+    <p>Install on Chrome in 30 seconds. First month free.</p>
+    <a href="#" class="btn btn-primary" target="_blank" rel="noopener">⚡ Install on Chrome</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand">
+      <img src="./assets/icon.png" alt="" />
+      <span>© 2026 Quantum Autofill · All rights reserved</span>
+    </div>
+    <div class="links">
+      <a href="#features">Features</a>
+      <a href="#privacy">Privacy</a>
+      <a href="mailto:kishanpatel385@gmail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

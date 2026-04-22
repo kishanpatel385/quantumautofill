@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Privacy Policy — Quantum Autofill</title>
+<meta name="description" content="How Quantum Autofill handles your data. Short answer: locally. We don't collect it." />
+<link rel="icon" type="image/png" href="./assets/icon.png" />
+<meta name="theme-color" content="#ea580c" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#fff7ed; --surface:#fff; --fg:#0f172a; --subtle:#475569; --border:#e2e8f0; --primary:#ea580c; --primary-soft:#ffedd5; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Inter, system-ui, sans-serif; color: var(--fg); background: var(--bg); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  a { color: var(--primary); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+  nav { background: rgba(255,247,237,.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  nav .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--fg); text-decoration: none; }
+  nav .brand img { width: 32px; height: 32px; border-radius: 8px; }
+  nav .links { display: flex; gap: 24px; align-items: center; }
+  nav .links a { color: var(--subtle); font-weight: 500; font-size: 14px; text-decoration: none; }
+  nav .links a:hover { color: var(--fg); }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 14px; transition: all .15s; }
+  .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 4px 14px rgba(234,88,12,.35); }
+  .btn-primary:hover { background: #c2410c; text-decoration: none; }
+  header { padding: 64px 0 32px; }
+  header .eyebrow { display: inline-block; padding: 6px 14px; background: var(--primary-soft); color: var(--primary); border-radius: 100px; font-weight: 600; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 20px; }
+  header h1 { font-size: 42px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 12px; }
+  header p.meta { color: var(--subtle); font-size: 14px; }
+  main { padding: 32px 0 80px; }
+  main h2 { font-size: 22px; font-weight: 700; margin: 40px 0 12px; letter-spacing: -0.01em; }
+  main h3 { font-size: 16px; font-weight: 700; margin: 24px 0 8px; }
+  main p, main li { font-size: 15.5px; color: var(--fg); margin-bottom: 12px; }
+  main ul { padding-left: 22px; margin-bottom: 16px; }
+  main li { margin-bottom: 6px; }
+  main code { font-family: ui-monospace, SF Mono, Consolas, monospace; font-size: 13.5px; background: var(--surface); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); }
+  .callout { padding: 20px 22px; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--primary); border-radius: 10px; margin: 20px 0; }
+  footer { padding: 32px 0; border-top: 1px solid var(--border); background: var(--surface); text-align: center; color: var(--subtle); font-size: 13px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="./">
+      <img src="./assets/icon.png" alt="" />
+      Quantum Autofill
+    </a>
+    <div class="links">
+      <a href="./">Home</a>
+      <a href="./#features">Features</a>
+      <a href="./#pricing">Pricing</a>
+      <a href="https://chromewebstore.google.com/detail/quantum-autofill/gehcemnmphffjdpnemcnffibbfjhpdka" class="btn btn-primary" target="_blank" rel="noopener">Install</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <span class="eyebrow">Privacy Policy</span>
+    <h1>Your data never leaves your device.</h1>
+    <p class="meta">Effective date: 14 April 2026</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <div class="callout">
+      <strong>TL;DR:</strong> Quantum Autofill stores everything locally in your browser. We operate no servers that see your autofill data, clip content, vault secrets, macros, or form history. The only data we process is your account email (for login) and subscription status (to verify your paid plan).
+    </div>
+
+    <h2>1. What data we handle</h2>
+
+    <h3>1.1 Data stored on your device only</h3>
+    <p>All of the following stays in your browser (IndexedDB + <code>chrome.storage.local</code>) and is <strong>never transmitted to us or any third party</strong>:</p>
+    <ul>
+      <li>Replacement rules (domains and field values you configure)</li>
+      <li>Text clips, text expansions, macros</li>
+      <li>Form history entries (passwords are excluded at capture time)</li>
+      <li>Vault entries — encrypted client-side with AES-GCM 256, key derived from your master password via PBKDF2 (100,000 iterations). We never see your master password.</li>
+      <li>Application settings (theme, shortcuts, preferences)</li>
+    </ul>
+
+    <h3>1.2 Data handled by third parties to enable your account</h3>
+
+    <p><strong>Supabase</strong> (authentication provider) processes:</p>
+    <ul>
+      <li>Your email address (login identifier)</li>
+      <li>Your hashed password (bcrypt)</li>
+      <li>Account creation timestamp and last sign-in time</li>
+      <li>Your Supabase-assigned user ID</li>
+    </ul>
+
+    <p><strong>LemonSqueezy</strong> (payment processor, merchant of record) processes:</p>
+    <ul>
+      <li>Your email address</li>
+      <li>Payment-method details (collected directly by LemonSqueezy/Stripe — we never see card numbers)</li>
+      <li>Billing address and tax info if applicable</li>
+      <li>Subscription status, renewal dates, customer ID</li>
+    </ul>
+
+    <p>
+      After a payment event, LemonSqueezy sends a signed webhook to our backend (a single Supabase Edge Function) with subscription status. We store only the minimum: user ID, status, renewal date, customer/subscription IDs.
+      See <a href="https://supabase.com/privacy" target="_blank" rel="noopener">Supabase privacy policy</a> and <a href="https://www.lemonsqueezy.com/privacy" target="_blank" rel="noopener">LemonSqueezy privacy policy</a>.
+    </p>
+
+    <h2>2. What we do NOT do</h2>
+    <ul>
+      <li>No tracking or analytics inside the extension</li>
+      <li>No telemetry or diagnostic pings</li>
+      <li>No advertising networks</li>
+      <li>No selling, sharing, or renting of your data</li>
+      <li>No access to your autofill content, clip content, vault entries, or form history</li>
+      <li>No browsing history collection</li>
+    </ul>
+
+    <h2>3. Permissions the extension uses</h2>
+    <ul>
+      <li><code>storage</code> — persist settings locally</li>
+      <li><code>tabs</code> — open the dashboard in a new tab</li>
+      <li><code>activeTab</code> — fill the current tab when you trigger it</li>
+      <li><code>scripting</code> — inject autofill logic into the page</li>
+      <li><code>contextMenus</code> — provide the right-click "Insert clip" item</li>
+      <li><code>host_permissions: http(s)://*/*</code> — required to fill forms on any website you visit</li>
+    </ul>
+    <p>Permissions are used only for the features they enable. They are not used for tracking, data collection, or any purpose beyond the feature set.</p>
+
+    <h2>4. Data retention</h2>
+    <ul>
+      <li>Local browser data: retained until you delete it (uninstalling the extension also removes it in most cases).</li>
+      <li>Account and subscription data on Supabase: retained while your account is active. Deletion on request within 30 days.</li>
+      <li>Payment data on LemonSqueezy: retained per their policy and applicable tax law.</li>
+    </ul>
+
+    <h2>5. Your rights</h2>
+    <p>You can at any time:</p>
+    <ul>
+      <li>Export all local data from Settings → Backup.</li>
+      <li>Delete local data by uninstalling the extension or using the Reset vault / Clear history actions.</li>
+      <li>Request deletion of your Supabase account and associated subscription record by emailing us.</li>
+      <li>Cancel your subscription from the LemonSqueezy customer portal linked in the extension.</li>
+    </ul>
+
+    <h2>6. Children</h2>
+    <p>Quantum Autofill is not directed to children under 13. We do not knowingly collect data from children under 13.</p>
+
+    <h2>7. Changes to this policy</h2>
+    <p>We may update this policy to reflect changes to features or legal requirements. We'll update the effective date at the top. Material changes will be surfaced in the extension before they take effect.</p>
+
+  </div>
+</main>
+
+<footer>
+  © 2026 Quantum Autofill · <a href="./" style="color: inherit;">Home</a>
+</footer>
+
+</body>
+</html>
